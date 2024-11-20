@@ -1,110 +1,84 @@
 <?php
-if (isset($_POST["kirim"])) {
-    $nim = $_POST["nim"]; //menangkap data nim
-    $nama = $_POST["nama"]; //menangkap data nama
-    if (isset($_POST["jk"])) { //ngecek gender udh terisi/blm
-        $jk = $_POST["jk"];
-    } else {
-        $jk = " "; //klo gender nda terisi, brarti gender kosong
-    }
-    $matkul = isset($_POST["matkul"]) ? implode(", ", $_POST["matkul"]) : " "; //isset buat ngecek isi. karena matkul sebuah array/list pakai implode.  separator buat spasi antara pemweb, dll
-    $domisili = $_POST["domisili"];
-    $lahir = $_POST["lahir"];
-    //error buat mastiin lo file yg kita masukin adalah foto (bukan zip dll)
-    if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) { //pakai $_FILES krn foto berupa file 
-        $foto = 'wchng/' . basename(path: $_FILES['foto']['name']); //basename berfungsi masukin nama file upload//....
-        move_uploaded_file(from: $_FILES['foto']['tmp_name'], to: $foto);
-    } else {
-        $foto = 'default.jpg'; //jika tidak ada foto yg di upload
-    }
-    $alamat = $_POST["alamat"];
-    //menampilkan hasil inputan
-    echo "
-                        <table>
-                            <tr>
-                                <td>
-                                    <img src='$foto' alt='Foto'>
-                                </td>
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <p>NIM : $nim</p>
-                                        </tr>
-                                        <tr>
-                                            <p>Nama : $nama</p>
-                                        </tr>
-                                        <tr>
-                                            <p>Jenis Kelamin : $jk</p>
-                                        </tr>
-                                        <tr>
-                                            <p>Kota : $domisili</p>
-                                        </tr>
-                                        <tr>
-                                            <p>Tanggal Lahir : $lahir</p>
-                                        </tr>
-                                        <tr>
-                                            <p>Matkul : $matkul</p>
-                                        </tr>
-                                        <tr>
-                                            <p>Alamat : $alamat</p>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-                        ";
+include_once("function/koneksi.php");
+
+$user_id = isset($_SESSION['id']) ? $_SESSION['id'] : false;
+
+$nim = "";
+$nama = "";
+$jenis_kelamin = "";
+$domisili = "";
+$tgl_lahir = "";
+$foto = "";
+$alamat = "";
+
+if ($user_id) {
+    $query = "SELECT * FROM user WHERE id = $user_id";
+    $result = mysqli_query($conn, $query);
+    $row = mysqli_fetch_assoc($result);
+
+    $nim = $row["nim"];
+    $nama = $row["nama"];
+    $jenis_kelamin = $row["jenis_kelamin"];
+    $domisili = $row["domisili"];
+    $tgl_lahir = $row["tgl_lahir"];
+    $foto = "<img src='" . BASE_URL . "image/" . $nim . "-" . $row["foto"] . "' style='width: 200px;vertical-align: middle;'/>";
+    $alamat = $row["alamat"];
 }
 ?>
-<form method="post" enctype="multipart/form-data">
-    <table cellpadding="10" border="0">
-        <tr>
-            <td>NIM</td>
-            <td><input type="text" name="nim" placeholder="Masukkan Nim..."></td>
-        </tr>
-        <tr>
-            <td>Nama</td>
-            <td><input type="text" name="nama" size="50"></td>
-        </tr>
-        <tr>
-            <td>Jenis Kelamin</td>
-            <td>
-                <input type="radio" name="jk" value="Pria"> Pria
-                <input type="radio" name="jk" value="Wanita"> Wanita
-            </td>
-        </tr>
-        <tr>
-            <td>Mata Kuliah</td>
-            <td>
-                <input type="checkbox" name="matkul[]" value="Pemrograman WEB"> Pemrograman WEB
-                <input type="checkbox" name="matkul[]" value="Riset Operasi"> Riset Operasi
-                <input type="checkbox" name="matkul[]" value="Manajemen Basis Data"> Manajemen Basis Data
-            </td>
-        </tr>
-        <tr>
-            <td>Domisili</td>
-            <td>
-                <select name="domisili">
-                    <option>Pontianak</option>
-                    <option>Singkawang</option>
-                    <option>Sambas</option>
-                    <option>Sintang</option>
-                </select> <br>
-            </td>
-        </tr>
-        <tr>
-            <td>Tgl Lahir</td>
-            <td><input type="date" name="lahir"> <br></td>
-        </tr>
-        <tr>
-            <td>Foto</td>
-            <td><input type="file" name="foto"> <br></td>
-        </tr>
-        <tr>
-            <td>Alamat</td>
-            <td><textarea name="alamat"></textarea></td>
-        </tr>
-        <tr>
-            <td><button type="submit" name="kirim" value="Kirim">Kirim</td>
-        </tr>
-    </table>
+<form method="post" action="<?php echo BASE_URL . "proses_edit_profil.php"; ?>" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="nim " class="form-label">NIM</label>
+        <input type="text" class="form-control" id="nim" name="nim" value="<?php echo $nim; ?>" readonly>
+    </div>
+
+    <div class="mb-3">
+        <label for="nama" class="form-label">Nama</label>
+        <input type="text" class="form-control" id="nama" name="nama" value="<?php echo $nama; ?>">
+    </div>
+
+    <div class="mb-3">
+        <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="jenis_kelamin" id="laki" value="Laki-laki" <?php echo $jenis_kelamin == "Laki-laki" ? "checked" : ""; ?>>
+            <label class="form-check-label" for="laki">
+                Laki-laki
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="jenis_kelamin" id="perempuan" value="Perempuan" <?php echo $jenis_kelamin == "Perempuan" ? "checked" : ""; ?>>
+            <label class="form-check-label" for="perempuan">
+                Perempuan
+            </label>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="domisili" class="form-label">Kota</label>
+        <select class="form-select" aria-label="Default select example" id="domisili" name="domisili">
+            <?php
+            $kotas = ["Jakarta", "Bandung", "Surabaya", "Semarang", "Yogyakarta"];
+            foreach ($kotas as $kota) {
+                $selected = $domisili == $kota ? "selected" : "";
+                echo "<option value='$kota' $selected>$kota</option>";
+            }
+            ?>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="tgl_lahir" class="form-label">Tanggal Lahir</label>
+        <input type="date" class="form-control" id="tgl_lahir" name="tgl_lahir" value="<?php echo $tgl_lahir; ?>">
+    </div>
+
+    <div class="mb-3">
+        <label for="foto" class="form-label">Foto</label>
+        <input type="file" class="form-control" id="foto" name="file"><?php echo $foto; ?>
+    </div>
+
+    <div class="mb-3">
+        <label for="alamat" class="form-label">Alamat</label>
+        <textarea class="form-control" id="alamat" name="alamat" rows="3"><?php echo $alamat; ?></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
 </form>

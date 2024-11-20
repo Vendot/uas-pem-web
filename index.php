@@ -1,8 +1,13 @@
 <?php
-include_once("function/helper.php");
+    include_once("function/helper.php");
 
-$page = isset($_GET['page']) ? $_GET['page'] : false;
+    session_start();
 
+    $page = isset($_GET['page']) ? $_GET['page'] : false;
+    $notif = isset($_GET['notif']) ? $_GET['notif'] : false;
+    $user_id = isset($_SESSION['id']) ? $_SESSION['id'] : false;
+    $nama = isset($_SESSION['nama']) ? $_SESSION['nama'] : false;
+    $role = isset($_SESSION['role']) ? $_SESSION['role'] : false;
 
 ?>
 
@@ -16,7 +21,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : false;
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
-<body class="overflow-x-hidden">
+<body class="overflow-x-hidden mb-5">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Pemograman Web</a>
@@ -32,10 +37,10 @@ $page = isset($_GET['page']) ? $_GET['page'] : false;
                         <a class="nav-link" href="<?php echo BASE_URL . "index.php?page=kontak"; ?>">Kontak</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Latihan</a>
+                        <a class="nav-link" href="<?php echo BASE_URL . "index.php?page=latihan"; ?>">Latihan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Database 1</a>
+                        <a class="nav-link" href="<?php echo BASE_URL . "index.php?page=database"; ?>">Database 1</a>
                     </li>
                 </ul>
             </div>
@@ -48,7 +53,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : false;
                 <a href="?page=home" class="list-group-item list-group-item-action">Home</a>
                 <a href="?page=kontak" class="list-group-item list-group-item-action">Kontak</a>
                 <a href="?page=latihan" class="list-group-item list-group-item-action">Latihan</a>
-                <a href="?page=database1" class="list-group-item list-group-item-action">Database 1</a>
+                <a href="?page=database" class="list-group-item list-group-item-action">Database 1</a>
             </div>
         </div>
 
@@ -69,11 +74,10 @@ $page = isset($_GET['page']) ? $_GET['page'] : false;
         <div class="col-3">
             <div class="container">
                 <div class="row gap-2">
-                    <!-- if not login show button login/register -->
                     <?php
-                    if (!isset($_SESSION['user'])) {
+                    if (!$user_id) {
                     ?>
-                        <div class="d-flex flex-row">
+                        <div class="d-flex flex-row mb-4">
                             <div class="col">
                                 <button type="button" class="btn btn-warning w-100" onclick="showLogin()">
                                     Login
@@ -96,9 +100,10 @@ $page = isset($_GET['page']) ? $_GET['page'] : false;
                     <?php
                     } else {
                     ?>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#logout">
-                            Logout
-                        </button>
+                        <h3 class="text-center">Selamat datang, <?php echo $nama; ?></h3>
+
+                        <a href="<?php echo BASE_URL . "auth/logout.php"; ?>" class="btn btn-primary">Logout</a>
+
                     <?php
                     }
                     ?>
