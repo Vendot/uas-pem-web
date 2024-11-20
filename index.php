@@ -1,13 +1,13 @@
 <?php
-    include_once("function/helper.php");
+include_once("function/helper.php");
 
-    session_start();
+session_start();
 
-    $page = isset($_GET['page']) ? $_GET['page'] : false;
-    $notif = isset($_GET['notif']) ? $_GET['notif'] : false;
-    $user_id = isset($_SESSION['id']) ? $_SESSION['id'] : false;
-    $nama = isset($_SESSION['nama']) ? $_SESSION['nama'] : false;
-    $role = isset($_SESSION['role']) ? $_SESSION['role'] : false;
+$page = isset($_GET['page']) ? $_GET['page'] : false;
+$notif = isset($_GET['notif']) ? $_GET['notif'] : false;
+$user_id = isset($_SESSION['id']) ? $_SESSION['id'] : false;
+$nama = isset($_SESSION['nama']) ? $_SESSION['nama'] : false;
+$role = isset($_SESSION['role']) ? $_SESSION['role'] : false;
 
 ?>
 
@@ -21,7 +21,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
-<body class="overflow-x-hidden mb-5">
+<body class="overflow-x-hidden mb-5 vh-100">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Pemograman Web</a>
@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <div class="col-6 border h-100">
+        <div class="col-6 border border-bottom-0 vh-100">
             <div id="content">
                 <?php
                 $filename = "$page.php";

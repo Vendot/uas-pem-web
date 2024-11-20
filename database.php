@@ -1,5 +1,4 @@
 <?php
-// get data user by id
 include_once("function/koneksi.php");
 
 $user_id = isset($_SESSION['id']) ? $_SESSION['id'] : false;
@@ -21,7 +20,7 @@ if ($user_id) {
 <?php
 if ($role == "admin") {
 ?>
-    <div class="row">
+    <div class="row mb-3 border-bottom pb-3">
         <div class="container">
             <form method="POST" action="<?php echo BASE_URL . "auth/proses_register.php"; ?>" class="needs-validation" novalidate="" autocomplete="off">
                 <div class="mb-3">
@@ -51,7 +50,13 @@ if ($role == "admin") {
                 <tr>
                     <th scope="col">NIM</th>
                     <th scope="col">Nama</th>
-                    <th scope="col">Aksi</th>
+                    <?php
+                    if ($user_id) {
+                    ?>
+                        <th scope="col">Aksi</th>
+                    <?php
+                    }
+                    ?>
                 </tr>
             </thead>
             <tbody>
@@ -66,16 +71,28 @@ if ($role == "admin") {
                         <td><?php echo $row["nim"]; ?></td>
                         <td><?php echo $row["nama"]; ?></td>
                         <?php
-                        if ($role == "admin") {
+                        if ($user_id) {
                         ?>
                             <td>
-                                <a href="<?php echo BASE_URL . "auth/proses_delete.php?id=" . $row["id"]; ?>" class="btn btn-danger">Delete</a>
-                            </td>
-                        <?php
-                        } else if ($role == "mahasiswa") {
-                        ?>
-                            <td>
-                                <a href="<?php echo BASE_URL . "index.php?page=detail&id=" . $row["id"]; ?>" class="btn btn-primary">Detail</a>
+                                <?php
+                                if ($role == "mahasiswa" || $role == "admin") {
+                                ?>
+                                    <a href="<?php echo BASE_URL . "index.php?page=user/detail_user&id=" . $row["id"]; ?>" class="btn btn-primary">Detail</a>
+                                <?php
+                                }
+
+                                if ($row["nim"] == $nim) {
+                                ?>
+                                    <a href="<?php echo BASE_URL . "index.php?page=kontak"; ?>" class="btn btn-warning">Edit</a>
+                                <?php
+                                }
+
+                                if ($role == "admin") {
+                                ?>
+                                    <a href="<?php echo BASE_URL . "index.php?page=user/delete_user?id=" . $row["id"]; ?>" class="btn btn-danger">Delete</a>
+                                <?php
+                                }
+                                ?>
                             </td>
                         <?php
                         }

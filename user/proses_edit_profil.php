@@ -1,8 +1,9 @@
 <?php
-    include_once("function/helper.php");
-    include_once("function/koneksi.php");
+    include_once("../function/helper.php");
+    include_once("../function/koneksi.php");
 
     $nim = $_POST['nim'];
+    echo var_dump($nim);
     $nama = $_POST['nama'];
     $jenis_kelamin = $_POST['jenis_kelamin'];
     $domisili = $_POST['domisili'];
@@ -25,7 +26,6 @@
 
         $update_foto = ", foto='$nama_file'";
     }
-    echo var_dump($update_foto);
 
     $query = "UPDATE user 
             SET nama='$nama', 

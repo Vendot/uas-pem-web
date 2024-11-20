@@ -4,7 +4,7 @@ include_once("function/koneksi.php");
 $user_id = isset($_SESSION['id']) ? $_SESSION['id'] : false;
 
 $nim = "";
-$nama = "";
+$nama_user = "";
 $jenis_kelamin = "";
 $domisili = "";
 $tgl_lahir = "";
@@ -17,7 +17,7 @@ if ($user_id) {
     $row = mysqli_fetch_assoc($result);
 
     $nim = $row["nim"];
-    $nama = $row["nama"];
+    $nama_user = $row["nama"];
     $jenis_kelamin = $row["jenis_kelamin"];
     $domisili = $row["domisili"];
     $tgl_lahir = $row["tgl_lahir"];
@@ -25,15 +25,22 @@ if ($user_id) {
     $alamat = $row["alamat"];
 }
 ?>
-<form method="post" action="<?php echo BASE_URL . "proses_edit_profil.php"; ?>" enctype="multipart/form-data">
-    <div class="mb-3">
+
+<?php 
+if ($user_id) {
+?>
+<form method="post" action="<?php echo BASE_URL . "user/proses_edit_profil.php"; ?>" enctype="multipart/form-data">
+<?php
+}
+?>
+<div class="mb-3">
         <label for="nim " class="form-label">NIM</label>
         <input type="text" class="form-control" id="nim" name="nim" value="<?php echo $nim; ?>" readonly>
     </div>
 
     <div class="mb-3">
         <label for="nama" class="form-label">Nama</label>
-        <input type="text" class="form-control" id="nama" name="nama" value="<?php echo $nama; ?>">
+        <input type="text" class="form-control" id="nama" name="nama" value="<?php echo $nama_user; ?>">
     </div>
 
     <div class="mb-3">
@@ -80,5 +87,11 @@ if ($user_id) {
         <textarea class="form-control" id="alamat" name="alamat" rows="3"><?php echo $alamat; ?></textarea>
     </div>
 
+    <?php 
+    if ($user_id) {
+    ?>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+    <?php
+    } 
+    ?>
