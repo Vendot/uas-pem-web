@@ -28,7 +28,12 @@ if ($user_id) {
 
 <?php 
 if ($user_id) {
+    $notif = isset($_GET["error"]) ? $_GET["error"] : false;
+    if ($notif) {
+        echo "<div class='alert alert-danger' role='alert'>" . $notif . "</div>";
+    }
 ?>
+
 <form method="post" action="<?php echo BASE_URL . "user/proses_edit_profil.php"; ?>" enctype="multipart/form-data">
 <?php
 }

@@ -81,15 +81,18 @@ if ($role == "admin") {
                                 <?php
                                 }
 
-                                if ($row["nim"] == $nim) {
+                                if ($row["nim"] == $nim || $role == "admin") {
                                 ?>
-                                    <a href="<?php echo BASE_URL . "index.php?page=kontak"; ?>" class="btn btn-warning">Edit</a>
+                                    <a href="<?php echo BASE_URL . "index.php?page=user/detail_user&id=" . $row["id"] . "&edit=true"; ?>" class="btn btn-warning">Edit</a>
                                 <?php
                                 }
 
-                                if ($role == "admin") {
+                                if ($role == "admin" && $row["nim"] != $nim) {
                                 ?>
-                                    <a href="<?php echo BASE_URL . "index.php?page=user/delete_user?id=" . $row["id"]; ?>" class="btn btn-danger">Delete</a>
+                                    <form method="POST" action="<?php echo BASE_URL . "user/delete_user.php"; ?>">
+                                        <input type="hidden" name="id" value="<?php echo $row["id"]; ?>">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
                                 <?php
                                 }
                                 ?>

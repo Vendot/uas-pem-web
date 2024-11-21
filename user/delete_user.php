@@ -1,6 +1,9 @@
 <?php
-    include_once("function/koneksi.php");
-    $id = $_GET["id"];
+    include_once("../function/koneksi.php");
+    include_once("../function/helper.php");
+
+    $id = $_POST["id"];
+    
     $query = "DELETE FROM user WHERE id = $id";
     $result = mysqli_query($conn, $query);
 
